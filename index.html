@@ -1,423 +1,409 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2487.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; -webkit-text-stroke: #000000; min-height: 16.0px}
-    p.p3 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #4d5055; -webkit-text-stroke: #4d5055}
-    p.p4 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #18702b; -webkit-text-stroke: #18702b}
-    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #6f0ec3; -webkit-text-stroke: #6f0ec3}
-    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; font: 14.0px Menlo; color: #bf1c25; -webkit-text-stroke: #bf1c25}
-    span.s1 {font-kerning: none; color: #6f0ec3; background-color: #ecf1f7; -webkit-text-stroke: 0px #6f0ec3}
-    span.s2 {font-kerning: none; background-color: #ecf1f7}
-    span.s3 {font-kerning: none; color: #0e6e6d; background-color: #ecf1f7; -webkit-text-stroke: 0px #0e6e6d}
-    span.s4 {font-kerning: none; color: #18702b; background-color: #ecf1f7; -webkit-text-stroke: 0px #18702b}
-    span.s5 {font-kerning: none}
-    span.s6 {font-kerning: none; color: #a4450b; background-color: #ecf1f7; -webkit-text-stroke: 0px #a4450b}
-    span.s7 {font-kerning: none; color: #000000; background-color: #ecf1f7; -webkit-text-stroke: 0px #000000}
-    span.s8 {font-kerning: none; color: #4d5055; background-color: #ecf1f7; -webkit-text-stroke: 0px #4d5055}
-    span.s9 {font-kerning: none; color: #bf1c25; background-color: #ecf1f7; -webkit-text-stroke: 0px #bf1c25}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Архитектура Метапрограмм</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">import</span><span class="s2"> </span><span class="s3">React</span><span class="s2">, { useState, useMemo } </span><span class="s1">from</span><span class="s2"> </span><span class="s4">'react'</span><span class="s2">;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p3"><span class="s2">// --- ДАННЫЕ ТЕСТА ---</span></p>
-<p class="p1"><span class="s1">const</span><span class="s2"> domains = [</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>{</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>id: </span><span class="s6">1</span><span class="s2">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>title: </span><span class="s2">"ДОМЕН 1: Разрыв связи и отвержение"</span><span class="s7">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>need: </span><span class="s2">"Потребность в безопасности"</span><span class="s7">,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>questions: [</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"1_d"</span><span class="s7">, mp: </span><span class="s6">1</span><span class="s7">, mpName: </span><span class="s2">"Покинутость / Нестабильность"</span><span class="s7">, text: </span><span class="s2">"Я часто боюсь, что близкие люди внезапно исчезнут из моей жизни или найдут кого-то лучше."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"1_r"</span><span class="s7">, mp: </span><span class="s6">1</span><span class="s7">, mpName: </span><span class="s2">"Покинутость / Нестабильность"</span><span class="s7">, text: </span><span class="s2">"Я абсолютно уверен, что люди, которых я люблю, всегда будут рядом со мной."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"2_d"</span><span class="s7">, mp: </span><span class="s6">2</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональный голод"</span><span class="s7">, text: </span><span class="s2">"Мне кажется, что меня никто по-настоящему не понимает и не согревает душевным теплом."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"2_r"</span><span class="s7">, mp: </span><span class="s6">2</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональный голод"</span><span class="s7">, text: </span><span class="s2">"Я чувствую глубокую связь с окружающими и получаю достаточно заботы и внимания."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"3_d"</span><span class="s7">, mp: </span><span class="s6">3</span><span class="s7">, mpName: </span><span class="s2">"Использование / Недоверие"</span><span class="s7">, text: </span><span class="s2">"Я постоянно ищу скрытые мотивы в поведении людей; они часто хотят использовать меня."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"3_r"</span><span class="s7">, mp: </span><span class="s6">3</span><span class="s7">, mpName: </span><span class="s2">"Использование / Недоверие"</span><span class="s7">, text: </span><span class="s2">"Я легко доверяю людям и верю в их искренние намерения без подвоха."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"4_d"</span><span class="s7">, mp: </span><span class="s6">4</span><span class="s7">, mpName: </span><span class="s2">"Поломанность"</span><span class="s7">, text: </span><span class="s2">"В глубине души я чувствую, что со мной что-то фундаментально не так, я словно «бракованный»."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"4_r"</span><span class="s7">, mp: </span><span class="s6">4</span><span class="s7">, mpName: </span><span class="s2">"Поломанность"</span><span class="s7">, text: </span><span class="s2">"Я считаю себя достойным, целостным человеком, заслуживающим любви просто по праву рождения."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"5_d"</span><span class="s7">, mp: </span><span class="s6">5</span><span class="s7">, mpName: </span><span class="s2">"Социальная изоляция / Отвержение"</span><span class="s7">, text: </span><span class="s2">"Я всегда чувствую себя белой вороной, аутсайдером в любой компании или группе."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"5_r"</span><span class="s7">, mp: </span><span class="s6">5</span><span class="s7">, mpName: </span><span class="s2">"Социальная изоляция / Отвержение"</span><span class="s7">, text: </span><span class="s2">"Я легко вливаюсь в любой коллектив и быстро начинаю чувствовать себя «своим»."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"6_d"</span><span class="s7">, mp: </span><span class="s6">6</span><span class="s7">, mpName: </span><span class="s2">"Конфликт лояльности"</span><span class="s7">, text: </span><span class="s2">"Мой личный успех или сильные изменения в жизни кажутся мне предательством моей семьи или старого окружения."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"6_r"</span><span class="s7">, mp: </span><span class="s6">6</span><span class="s7">, mpName: </span><span class="s2">"Конфликт лояльности"</span><span class="s7">, text: </span><span class="s2">"Я легко позволяю себе быть успешнее или жить иначе, чем мои родственники и друзья, не испытывая вины."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"7_d"</span><span class="s7">, mp: </span><span class="s6">7</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональная инвалидация"</span><span class="s7">, text: </span><span class="s2">"Я часто думаю, что мои чувства неуместны, преувеличены или «неправильны»."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"7_r"</span><span class="s7">, mp: </span><span class="s6">7</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональная инвалидация"</span><span class="s7">, text: </span><span class="s2">"Я полностью доверяю своим эмоциям и считаю их абсолютно естественными и важными."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"8_d"</span><span class="s7">, mp: </span><span class="s6">8</span><span class="s7">, mpName: </span><span class="s2">"Страх близости"</span><span class="s7">, text: </span><span class="s2">"Когда отношения становятся слишком близкими, я чувствую угрозу и желание отдалиться."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"8_r"</span><span class="s7">, mp: </span><span class="s6">8</span><span class="s7">, mpName: </span><span class="s2">"Страх близости"</span><span class="s7">, text: </span><span class="s2">"Я чувствую себя абсолютно безопасно и комфортно, когда полностью открываюсь партнеру."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"9_d"</span><span class="s7">, mp: </span><span class="s6">9</span><span class="s7">, mpName: </span><span class="s2">"Отсутствие принадлежности"</span><span class="s7">, text: </span><span class="s2">"Я чувствую хроническое одиночество, словно у меня нет корней ни в одном месте или обществе."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"9_r"</span><span class="s7">, mp: </span><span class="s6">9</span><span class="s7">, mpName: </span><span class="s2">"Отсутствие принадлежности"</span><span class="s7">, text: </span><span class="s2">"У меня есть четкое, непоколебимое ощущение своего места в мире, своего «дома»."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"10_d"</span><span class="s7">, mp: </span><span class="s6">10</span><span class="s7">, mpName: </span><span class="s2">"Семейная запутанность"</span><span class="s7">, text: </span><span class="s2">"Мне порой кажется, что я проживаю не свою жизнь, а несу груз или расплачиваюсь за судьбу кого-то из предков."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"10_r"</span><span class="s7">, mp: </span><span class="s6">10</span><span class="s7">, mpName: </span><span class="s2">"Семейная запутанность"</span><span class="s7">, text: </span><span class="s2">"Мои жизненные сценарии и выборы принадлежат исключительно мне, они свободны от семейных драм прошлого."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> }</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>]</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>},</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>{</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>id: </span><span class="s6">2</span><span class="s2">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>title: </span><span class="s2">"ДОМЕН 2: Нарушенная автономия и эффективность"</span><span class="s7">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>need: </span><span class="s2">"Потребность в компетентности"</span><span class="s7">,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>questions: [</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"11_d"</span><span class="s7">, mp: </span><span class="s6">11</span><span class="s7">, mpName: </span><span class="s2">"Растворение"</span><span class="s7">, text: </span><span class="s2">"В отношениях я часто теряю себя, полностью сливаясь с желаниями и жизнью партнера."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"11_r"</span><span class="s7">, mp: </span><span class="s6">11</span><span class="s7">, mpName: </span><span class="s2">"Растворение"</span><span class="s7">, text: </span><span class="s2">"Даже в самых близких отношениях я сохраняю четкие границы своей личности и своих интересов."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"12_d"</span><span class="s7">, mp: </span><span class="s6">12</span><span class="s7">, mpName: </span><span class="s2">"Провал"</span><span class="s7">, text: </span><span class="s2">"Я внутренне убежден, что в конечном итоге потерплю неудачу в делах, за которые берусь."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"12_r"</span><span class="s7">, mp: </span><span class="s6">12</span><span class="s7">, mpName: </span><span class="s2">"Провал"</span><span class="s7">, text: </span><span class="s2">"Я непоколебимо уверен в своей компетентности и способности достигать поставленных целей."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"13_d"</span><span class="s7">, mp: </span><span class="s6">13</span><span class="s7">, mpName: </span><span class="s2">"Беспомощность"</span><span class="s7">, text: </span><span class="s2">"Мне очень тяжело справляться с повседневными обязанностями без постоянной помощи и опоры других."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"13_r"</span><span class="s7">, mp: </span><span class="s6">13</span><span class="s7">, mpName: </span><span class="s2">"Беспомощность"</span><span class="s7">, text: </span><span class="s2">"Я чувствую себя абсолютно уверенно, решая бытовые, финансовые и жизненные задачи в одиночку."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"14_d"</span><span class="s7">, mp: </span><span class="s6">14</span><span class="s7">, mpName: </span><span class="s2">"Пророчество (Ожидание катастрофы)"</span><span class="s7">, text: </span><span class="s2">"Я нахожусь в постоянном напряжении, ожидая, что вот-вот случится что-то плохое."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"14_r"</span><span class="s7">, mp: </span><span class="s6">14</span><span class="s7">, mpName: </span><span class="s2">"Пророчество (Ожидание катастрофы)"</span><span class="s7">, text: </span><span class="s2">"Я уверен, что в будущем, в том числе в старости, буду жить в полной безопасности и достатке."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"15_d"</span><span class="s7">, mp: </span><span class="s6">15</span><span class="s7">, mpName: </span><span class="s2">"Страх заметности"</span><span class="s7">, text: </span><span class="s2">"Мне комфортнее оставаться в тени и быть «невидимым», чтобы избежать критики или нападок."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"15_r"</span><span class="s7">, mp: </span><span class="s6">15</span><span class="s7">, mpName: </span><span class="s2">"Страх заметности"</span><span class="s7">, text: </span><span class="s2">"Я с удовольствием привлекаю к себе внимание, выступаю публично и открыто заявляю о себе."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"16_d"</span><span class="s7">, mp: </span><span class="s6">16</span><span class="s7">, mpName: </span><span class="s2">"Ожидание разрешения"</span><span class="s7">, text: </span><span class="s2">"Мне трудно начать действовать, пока кто-то авторитетный не подтвердит, что я делаю всё правильно."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"16_r"</span><span class="s7">, mp: </span><span class="s6">16</span><span class="s7">, mpName: </span><span class="s2">"Ожидание разрешения"</span><span class="s7">, text: </span><span class="s2">"Я легко принимаю решения и перехожу к действиям, опираясь исключительно на собственный внутренний авторитет."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"17_d"</span><span class="s7">, mp: </span><span class="s6">17</span><span class="s7">, mpName: </span><span class="s2">"Уязвимость к эмоциям"</span><span class="s7">, text: </span><span class="s2">"Я мгновенно «заражаюсь» чужими эмоциями (тревогой, гневом) и не могу от них отстраниться."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"17_r"</span><span class="s7">, mp: </span><span class="s6">17</span><span class="s7">, mpName: </span><span class="s2">"Уязвимость к эмоциям"</span><span class="s7">, text: </span><span class="s2">"Я умею сохранять внутреннее спокойствие и стабильность, даже если рядом кто-то паникует или злится."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"18_d"</span><span class="s7">, mp: </span><span class="s6">18</span><span class="s7">, mpName: </span><span class="s2">"Созависимость регуляции"</span><span class="s7">, text: </span><span class="s2">"Чтобы успокоиться и прийти в норму после стресса, мне физически необходимо присутствие конкретного человека."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"18_r"</span><span class="s7">, mp: </span><span class="s6">18</span><span class="s7">, mpName: </span><span class="s2">"Созависимость регуляции"</span><span class="s7">, text: </span><span class="s2">"Я умею самостоятельно и быстро приводить свои эмоции и нервную систему в баланс."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"19_d"</span><span class="s7">, mp: </span><span class="s6">19</span><span class="s7">, mpName: </span><span class="s2">"Чрезмерная автономия / Контрзависимость"</span><span class="s7">, text: </span><span class="s2">"Я принципиально всё делаю сам; просить о помощи для меня равносильно проявлению слабости."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"19_r"</span><span class="s7">, mp: </span><span class="s6">19</span><span class="s7">, mpName: </span><span class="s2">"Чрезмерная автономия / Контрзависимость"</span><span class="s7">, text: </span><span class="s2">"Мне легко и комфортно делегировать задачи и искренне просить окружающих о поддержке, когда мне трудно."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> }</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>]</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>},</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>{</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>id: </span><span class="s6">3</span><span class="s2">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>title: </span><span class="s2">"ДОМЕН 3: Ориентация на других"</span><span class="s7">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>need: </span><span class="s2">"Потребность в свободе выражения"</span><span class="s7">,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>questions: [</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"20_d"</span><span class="s7">, mp: </span><span class="s6">20</span><span class="s7">, mpName: </span><span class="s2">"Подчинение"</span><span class="s7">, text: </span><span class="s2">"Я часто уступаю и соглашаюсь с другими, только чтобы избежать конфликта или их недовольства."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"20_r"</span><span class="s7">, mp: </span><span class="s6">20</span><span class="s7">, mpName: </span><span class="s2">"Подчинение"</span><span class="s7">, text: </span><span class="s2">"Я всегда твердо отстаиваю свои интересы, даже если это приведет к открытому столкновению с окружающими."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"21_d"</span><span class="s7">, mp: </span><span class="s6">21</span><span class="s7">, mpName: </span><span class="s2">"Поиск признания/одобрения"</span><span class="s7">, text: </span><span class="s2">"Моя самооценка напрямую зависит от того, сколько восхищения, лайков и похвалы я получаю от окружающих."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"21_r"</span><span class="s7">, mp: </span><span class="s6">21</span><span class="s7">, mpName: </span><span class="s2">"Поиск признания/одобрения"</span><span class="s7">, text: </span><span class="s2">"Моя оценка себя остается стабильно высокой, даже если меня жестко критикуют или вообще не замечают."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"22_d"</span><span class="s7">, mp: </span><span class="s6">22</span><span class="s7">, mpName: </span><span class="s2">"Самопожертвование"</span><span class="s7">, text: </span><span class="s2">"Я регулярно пренебрегаю собственными потребностями, ставя интересы и комфорт других людей на первое место."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"22_r"</span><span class="s7">, mp: </span><span class="s6">22</span><span class="s7">, mpName: </span><span class="s2">"Самопожертвование"</span><span class="s7">, text: </span><span class="s2">"Я забочусь о себе и своих желаниях в первую очередь, и абсолютно не считаю это эгоизмом."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"23_d"</span><span class="s7">, mp: </span><span class="s6">23</span><span class="s7">, mpName: </span><span class="s2">"Комплекс спасителя"</span><span class="s7">, text: </span><span class="s2">"Я чувствую свою настоящую значимость только тогда, когда «спасаю» кого-то или решаю чужие серьезные проблемы."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"23_r"</span><span class="s7">, mp: </span><span class="s6">23</span><span class="s7">, mpName: </span><span class="s2">"Комплекс спасителя"</span><span class="s7">, text: </span><span class="s2">"Я спокойно позволяю людям самим проходить через их трудности, не вмешиваясь и не бросаясь на помощь."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"24_d"</span><span class="s7">, mp: </span><span class="s6">24</span><span class="s7">, mpName: </span><span class="s2">"Сверхответственность"</span><span class="s7">, text: </span><span class="s2">"Я чувствую, что обязан поддерживать хорошую атмосферу и сглаживать углы в коллективе или семье любой ценой."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"24_r"</span><span class="s7">, mp: </span><span class="s6">24</span><span class="s7">, mpName: </span><span class="s2">"Сверхответственность"</span><span class="s7">, text: </span><span class="s2">"Я не считаю себя ответственным за настроение, обиды и эмоции других взрослых людей."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"25_d"</span><span class="s7">, mp: </span><span class="s6">25</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональное исполнение"</span><span class="s7">, text: </span><span class="s2">"У меня есть склонность драматизировать события и «громко» проживать эмоции, чтобы на меня обратили внимание."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"25_r"</span><span class="s7">, mp: </span><span class="s6">25</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональное исполнение"</span><span class="s7">, text: </span><span class="s2">"Я выражаю свои чувства ровно и спокойно, не нуждаясь в театральности и зрителях."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"26_d"</span><span class="s7">, mp: </span><span class="s6">26</span><span class="s7">, mpName: </span><span class="s2">"Заслуженная ценность"</span><span class="s7">, text: </span><span class="s2">"Мне кажется, что я должен постоянно доказывать свою ценность через новые достижения, деньги и статус."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"26_r"</span><span class="s7">, mp: </span><span class="s6">26</span><span class="s7">, mpName: </span><span class="s2">"Заслуженная ценность"</span><span class="s7">, text: </span><span class="s2">"Я глубоко уверен, что ценен сам по себе, просто потому что я есть, независимо от карьерных или финансовых успехов."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> }</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>]</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>},</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>{</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>id: </span><span class="s6">4</span><span class="s2">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>title: </span><span class="s2">"ДОМЕН 4: Гиперконтроль и подавление"</span><span class="s7">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>need: </span><span class="s2">"Потребность в спонтанности"</span><span class="s7">,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>questions: [</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"27_d"</span><span class="s7">, mp: </span><span class="s6">27</span><span class="s7">, mpName: </span><span class="s2">"Пессимизм"</span><span class="s7">, text: </span><span class="s2">"Я склонен обращать внимание на негативные аспекты и всегда готовлюсь к худшему сценарию."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"27_r"</span><span class="s7">, mp: </span><span class="s6">27</span><span class="s7">, mpName: </span><span class="s2">"Пессимизм"</span><span class="s7">, text: </span><span class="s2">"В любой ситуации я изначально вижу позитивные возможности и свято верю в лучший исход."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"28_d"</span><span class="s7">, mp: </span><span class="s6">28</span><span class="s7">, mpName: </span><span class="s2">"Перфекционизм"</span><span class="s7">, text: </span><span class="s2">"Я требую от себя абсолютной безупречности во всем; любая моя ошибка для меня — это катастрофа."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"28_r"</span><span class="s7">, mp: </span><span class="s6">28</span><span class="s7">, mpName: </span><span class="s2">"Перфекционизм"</span><span class="s7">, text: </span><span class="s2">"Я легко прощаю себе недочеты и живу по принципу: «сделанное лучше идеального»."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"29_d"</span><span class="s7">, mp: </span><span class="s6">29</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональная ингибиция (подавление)"</span><span class="s7">, text: </span><span class="s2">"Я тщательно контролирую и подавляю свои естественные порывы, чтобы всегда выглядеть рационально и сдержанно."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"29_r"</span><span class="s7">, mp: </span><span class="s6">29</span><span class="s7">, mpName: </span><span class="s2">"Эмоциональная ингибиция (подавление)"</span><span class="s7">, text: </span><span class="s2">"Я очень спонтанный человек и легко, без цензуры проявляю свои чувства в моменте."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"30_d"</span><span class="s7">, mp: </span><span class="s6">30</span><span class="s7">, mpName: </span><span class="s2">"Инструкции"</span><span class="s7">, text: </span><span class="s2">"Я очень хорошо вижу ошибки других людей, и меня сильно раздражает, когда они не следуют правилам и тупят."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"30_r"</span><span class="s7">, mp: </span><span class="s6">30</span><span class="s7">, mpName: </span><span class="s2">"Инструкции"</span><span class="s7">, text: </span><span class="s2">"Я максимально терпим к чужим недостаткам и неэффективности; у каждого могут быть свои правила жизни."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"31_d"</span><span class="s7">, mp: </span><span class="s6">31</span><span class="s7">, mpName: </span><span class="s2">"Страх воздействия / Запрет на гнев"</span><span class="s7">, text: </span><span class="s2">"Я панически боюсь проявить свой гнев, потому что уверен, что это разрушит человека или наши отношения."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"31_r"</span><span class="s7">, mp: </span><span class="s6">31</span><span class="s7">, mpName: </span><span class="s2">"Страх воздействия / Запрет на гнев"</span><span class="s7">, text: </span><span class="s2">"Я легко, открыто и без чувства вины выражаю свою злость, когда кто-то нарушает мои границы."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> }</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>]</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>},</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>{</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>id: </span><span class="s6">5</span><span class="s2">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>title: </span><span class="s2">"ДОМЕН 5: Нарушенные границы"</span><span class="s7">,</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>need: </span><span class="s2">"Потребность в реалистичных рамках"</span><span class="s7">,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>questions: [</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"32_d"</span><span class="s7">, mp: </span><span class="s6">32</span><span class="s7">, mpName: </span><span class="s2">"Надменность"</span><span class="s7">, text: </span><span class="s2">"Правила созданы не для меня; я заслуживаю особого отношения и большего, чем другие."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"32_r"</span><span class="s7">, mp: </span><span class="s6">32</span><span class="s7">, mpName: </span><span class="s2">"Надменность"</span><span class="s7">, text: </span><span class="s2">"Я считаю себя абсолютно равным любому другому человеку, без претензий на какие-либо привилегии."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"33_d"</span><span class="s7">, mp: </span><span class="s6">33</span><span class="s7">, mpName: </span><span class="s2">"Отсутствие дисциплины"</span><span class="s7">, text: </span><span class="s2">"Мне трудно усидеть на месте, и я часто бросаю дела, если они требуют долгого терпения без быстрого результата."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"direct"</span><span class="s7"> },</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>{ id: </span><span class="s2">"33_r"</span><span class="s7">, mp: </span><span class="s6">33</span><span class="s7">, mpName: </span><span class="s2">"Отсутствие дисциплины"</span><span class="s7">, text: </span><span class="s2">"Я обладаю железной дисциплиной и легко отказываюсь от сиюминутных удовольствий ради долгосрочной, большой цели."</span><span class="s7">, </span><span class="s1">type</span><span class="s7">: </span><span class="s2">"reverse"</span><span class="s7"> }</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>]</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>}</span></p>
-<p class="p1"><span class="s2">];</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p5"><span class="s2">export</span><span class="s7"> </span><span class="s2">default</span><span class="s7"> </span><span class="s2">function</span><span class="s7"> </span><span class="s3">App</span><span class="s7">() {</span></p>
-<p class="p3"><span class="s7"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s7"> [step, setStep] = useState(</span><span class="s6">0</span><span class="s7">); </span><span class="s2">// 0 = Intro, 1-5 = Domains, 6 = Results</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s2"> [answers, setAnswers] = useState({});</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s2"> [errorMsg, setErrorMsg] = useState(</span><span class="s4">''</span><span class="s2">);</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s2"> handleAnswer = (qId, value) =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>setAnswers(prev =&gt; ({ ...prev, [qId]: value }));</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>setErrorMsg(</span><span class="s4">''</span><span class="s2">);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>};</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s2"> handleNext = () =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">if</span><span class="s2"> (step &gt;= </span><span class="s6">1</span><span class="s2"> &amp;&amp; step &lt;= </span><span class="s6">5</span><span class="s2">) {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s1">const</span><span class="s2"> currentDomain = domains[step - </span><span class="s6">1</span><span class="s2">];</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s1">const</span><span class="s2"> unanswered = currentDomain.questions.filter(q =&gt; !answers[q.id]);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s1">if</span><span class="s2"> (unanswered.length &gt; </span><span class="s6">0</span><span class="s2">) {</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">        </span>setErrorMsg(</span><span class="s2">'Пожалуйста, ответьте на все вопросы на этой странице, чтобы продолжить.'</span><span class="s7">);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">return</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>window.scrollTo(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>setStep(prev =&gt; prev + </span><span class="s6">1</span><span class="s2">);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>};</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s2"> calculateResults = useMemo(() =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">if</span><span class="s2"> (step !== </span><span class="s6">6</span><span class="s2">) </span><span class="s1">return</span><span class="s2"> </span><span class="s1">null</span><span class="s2">;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">const</span><span class="s2"> results = {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>domains: [],</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>metaprograms: []</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>};</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">let</span><span class="s2"> allMps = [];</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>domains.forEach(domain =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s1">let</span><span class="s2"> domainTotalScore = </span><span class="s6">0</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s1">let</span><span class="s2"> domainMpCount = domain.questions.length / </span><span class="s6">2</span><span class="s2">;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">      </span></span></p>
-<p class="p3"><span class="s7"><span class="Apple-converted-space">      </span></span><span class="s2">// Сгруппировать вопросы по метапрограммам (по id числа)</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s1">const</span><span class="s2"> mpMap = {};</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>domain.questions.forEach(q =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">if</span><span class="s2"> (!mpMap[q.mp]) {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>mpMap[q.mp] = { id: q.mp, name: q.mpName, domainId: domain.id, domainName: domain.title, need: domain.need };</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">if</span><span class="s2"> (q.</span><span class="s1">type</span><span class="s2"> === </span><span class="s4">'direct'</span><span class="s2">) {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>mpMap[q.mp].directScore = answers[q.id] || </span><span class="s6">0</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>} </span><span class="s1">else</span><span class="s2"> {</span></p>
-<p class="p3"><span class="s7"><span class="Apple-converted-space">          </span></span><span class="s2">// Инверсия для обратных</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span></span><span class="s1">const</span><span class="s2"> rawScore = answers[q.id] || </span><span class="s6">0</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>mpMap[q.mp].reverseScore = rawScore &gt; </span><span class="s6">0</span><span class="s2"> ? (</span><span class="s6">6</span><span class="s2"> - rawScore) : </span><span class="s6">0</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span></span><span class="s3">Object</span><span class="s2">.values(mpMap).forEach(mp =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>mp.total = mp.directScore + mp.reverseScore;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>domainTotalScore += mp.total;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">        </span></span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">        </span></span><span class="s1">let</span><span class="s7"> severity = </span><span class="s2">'Низкая (не проявлена)'</span><span class="s7">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">let</span><span class="s2"> color = </span><span class="s4">'text-green-600'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">let</span><span class="s2"> bg = </span><span class="s4">'bg-green-100'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span></span><span class="s1">if</span><span class="s2"> (mp.total &gt;= </span><span class="s6">8</span><span class="s2">) {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>severity = </span><span class="s4">'Ярко выражена'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>color = </span><span class="s4">'text-red-600'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>bg = </span><span class="s4">'bg-red-100'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>} </span><span class="s1">else</span><span class="s2"> </span><span class="s1">if</span><span class="s2"> (mp.total &gt;= </span><span class="s6">5</span><span class="s2">) {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>severity = </span><span class="s4">'Умеренная'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>color = </span><span class="s4">'text-yellow-600'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>bg = </span><span class="s4">'bg-yellow-100'</span><span class="s2">;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>mp.severity = severity;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>mp.color = color;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>mp.bg = bg;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>allMps.push(mp);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>results.domains.push({</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>id: domain.id,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>title: domain.title,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>need: domain.need,</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>averageScore: (domainTotalScore / domainMpCount).toFixed(</span><span class="s6">1</span><span class="s2">)</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>results.metaprograms = allMps.sort((a, b) =&gt; b.total - a.total); </span><span class="s8">// Сортировка по убыванию выраженности</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">    </span></span></p>
-<p class="p3"><span class="s7"><span class="Apple-converted-space">    </span></span><span class="s2">// Сортировка доменов по убыванию среднего балла</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>results.domains.sort((a, b) =&gt; parseFloat(b.averageScore) - parseFloat(a.averageScore));</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span></span><span class="s1">return</span><span class="s2"> results;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>}, [step, answers]);</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span></span><span class="s1">const</span><span class="s2"> resetTest = () =&gt; {</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>setAnswers({});</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>setStep(</span><span class="s6">0</span><span class="s2">);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>window.scrollTo(</span><span class="s6">0</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>};</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p5"><span class="s7"><span class="Apple-converted-space">  </span></span><span class="s2">return</span><span class="s7"> (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">    </span>&lt;div className=</span><span class="s2">"min-h-screen bg-gray-50 text-gray-800 font-sans pb-12"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>&lt;header className=</span><span class="s2">"bg-indigo-600 text-white p-6 shadow-md"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>&lt;div className=</span><span class="s4">"max-w-4xl mx-auto"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>&lt;h1 className=</span><span class="s4">"text-2xl font-bold"</span><span class="s2">&gt;</span><span class="s9">Архитектура</span><span class="s2"> </span><span class="s9">Метапрограмм</span><span class="s2">&lt;/h1&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">          </span>&lt;p className=</span><span class="s4">"text-indigo-200 mt-1"</span><span class="s7">&gt;</span><span class="s2">Психометрический</span><span class="s7"> </span><span class="s2">профиль</span><span class="s7"> </span><span class="s2">личности</span><span class="s7"> (</span><span class="s6">33</span><span class="s7"> </span><span class="s2">паттерна</span><span class="s7">)&lt;/p&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>&lt;/header&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">      </span>&lt;main className=</span><span class="s2">"max-w-4xl mx-auto mt-8 p-4"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>{step === </span><span class="s6">0</span><span class="s2"> &amp;&amp; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">          </span>&lt;div className=</span><span class="s2">"bg-white p-8 rounded-2xl shadow-sm border border-gray-100"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;h2 className=</span><span class="s2">"text-3xl font-semibold mb-4 text-gray-900"</span><span class="s7">&gt;</span><span class="s9">Инструкция</span><span class="s7">&lt;/h2&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"prose prose-indigo max-w-none text-gray-600 space-y-4 text-lg"</span><span class="s7">&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">              </span>&lt;p&gt;</span><span class="s2">Вам</span><span class="s7"> </span><span class="s2">будет</span><span class="s7"> </span><span class="s2">предложено</span><span class="s7"> </span><span class="s6">66</span><span class="s7"> </span><span class="s2">утверждений</span><span class="s7">. </span><span class="s2">Прочитайте</span><span class="s7"> </span><span class="s2">каждое</span><span class="s7"> </span><span class="s2">и</span><span class="s7"> </span><span class="s2">оцените</span><span class="s7">, </span><span class="s2">насколько</span><span class="s7"> </span><span class="s2">оно</span><span class="s7"> </span><span class="s2">описывает</span><span class="s7"> </span><span class="s2">ваши</span><span class="s7"> </span><span class="s2">привычные</span><span class="s7"> </span><span class="s2">мысли</span><span class="s7">, </span><span class="s2">чувства</span><span class="s7"> </span><span class="s2">или</span><span class="s7"> </span><span class="s2">поведение</span><span class="s7">.&lt;/p&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;p&gt;</span><span class="s9">Отвечайте</span><span class="s2"> &lt;strong&gt;</span><span class="s9">быстро</span><span class="s2">&lt;/strong&gt;, </span><span class="s9">опираясь</span><span class="s2"> </span><span class="s9">на</span><span class="s2"> </span><span class="s9">первое</span><span class="s2"> </span><span class="s9">впечатление</span><span class="s2">.&lt;/p&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>&lt;div className=</span><span class="s2">"bg-indigo-50 p-6 rounded-xl border border-indigo-100 mt-6"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&lt;h3 className=</span><span class="s4">"font-semibold text-indigo-900 mb-2"</span><span class="s2">&gt;</span><span class="s9">Шкала</span><span class="s2"> </span><span class="s9">оценки</span><span class="s2">:&lt;/h3&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                </span>&lt;ul className=</span><span class="s2">"list-disc pl-5 space-y-2 text-indigo-800"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;li&gt;&lt;strong&gt;</span><span class="s6">1</span><span class="s2">&lt;/strong&gt; </span><span class="s9">—</span><span class="s2"> </span><span class="s9">Абсолютно</span><span class="s2"> </span><span class="s9">не</span><span class="s2"> </span><span class="s9">согласен</span><span class="s2">&lt;/li&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;li&gt;&lt;strong&gt;</span><span class="s6">2</span><span class="s2">&lt;/strong&gt; </span><span class="s9">—</span><span class="s2"> </span><span class="s9">Скорее</span><span class="s2"> </span><span class="s9">не</span><span class="s2"> </span><span class="s9">согласен</span><span class="s2">&lt;/li&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;li&gt;&lt;strong&gt;</span><span class="s6">3</span><span class="s2">&lt;/strong&gt; </span><span class="s9">—</span><span class="s2"> </span><span class="s9">Нейтрально</span><span class="s2"> (</span><span class="s9">иногда</span><span class="s2"> </span><span class="s9">да</span><span class="s2">, </span><span class="s9">иногда</span><span class="s2"> </span><span class="s9">нет</span><span class="s2">)&lt;/li&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;li&gt;&lt;strong&gt;</span><span class="s6">4</span><span class="s2">&lt;/strong&gt; </span><span class="s9">—</span><span class="s2"> </span><span class="s9">Скорее</span><span class="s2"> </span><span class="s9">согласен</span><span class="s2">&lt;/li&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;li&gt;&lt;strong&gt;</span><span class="s6">5</span><span class="s2">&lt;/strong&gt; </span><span class="s9">—</span><span class="s2"> </span><span class="s9">Полностью</span><span class="s2"> </span><span class="s9">согласен</span><span class="s2">&lt;/li&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&lt;/ul&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;button<span class="Apple-converted-space"> </span></span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>onClick={handleNext}</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>className=</span><span class="s2">"mt-8 w-full md:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">              </span></span><span class="s2">Начать</span><span class="s7"> </span><span class="s2">тестирование</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>)}</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>{step &gt;= </span><span class="s6">1</span><span class="s2"> &amp;&amp; step &lt;= </span><span class="s6">5</span><span class="s2"> &amp;&amp; (</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>&lt;div className=</span><span class="s4">"animate-fade-in"</span><span class="s2">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"mb-6 flex items-center justify-between text-sm font-medium text-gray-500"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;span&gt;</span><span class="s9">Шаг</span><span class="s2"> {step} </span><span class="s9">из</span><span class="s2"> </span><span class="s6">5</span><span class="s2">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;span&gt;</span><span class="s9">Осталось</span><span class="s2">: {</span><span class="s6">5</span><span class="s2"> - step}&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"w-full bg-gray-200 rounded-full h-2.5 mb-8"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;div className=</span><span class="s4">"bg-indigo-600 h-2.5 rounded-full transition-all duration-500"</span><span class="s2"> style={{ width: </span><span class="s4">`</span><span class="s2">${(step / </span><span class="s6">5</span><span class="s2">) * </span><span class="s6">100</span><span class="s2">}</span><span class="s4">%`</span><span class="s2"> }}&gt;&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;h2 className=</span><span class="s4">"text-2xl font-bold text-gray-900 mb-2"</span><span class="s2">&gt;{domains[step - </span><span class="s6">1</span><span class="s2">].title}&lt;/h2&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;p className=</span><span class="s4">"text-indigo-600 font-medium mb-8"</span><span class="s2">&gt;</span><span class="s9">Исследуемая</span><span class="s2"> </span><span class="s9">потребность</span><span class="s2">: {domains[step - </span><span class="s6">1</span><span class="s2">].need}&lt;/p&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;div className=</span><span class="s4">"space-y-12"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>{domains[step - </span><span class="s6">1</span><span class="s2">].questions.map((q, index) =&gt; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                  </span>&lt;div key={q.id} className=</span><span class="s2">"border-b border-gray-100 pb-8 last:border-0 last:pb-0"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;p className=</span><span class="s4">"text-lg font-medium text-gray-800 mb-6"</span><span class="s2">&gt;{index + </span><span class="s6">1</span><span class="s2">}. {q.text}&lt;/p&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">                    </span></span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                    </span>&lt;div className=</span><span class="s2">"flex flex-col sm:flex-row justify-between items-center gap-4 w-full max-w-2xl mx-auto"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                      </span>&lt;span className=</span><span class="s2">"text-xs text-gray-400 font-medium w-full sm:w-auto text-left sm:text-right"</span><span class="s7">&gt;</span><span class="s9">Абсолютно</span><span class="s7">&lt;br className=</span><span class="s2">"hidden sm:block"</span><span class="s7">/&gt;</span><span class="s9">не</span><span class="s7"> </span><span class="s9">согласен</span><span class="s7">&lt;/span&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">                      </span></span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                      </span>&lt;div className=</span><span class="s2">"flex justify-between items-center w-full sm:w-auto gap-2 md:gap-4"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>{[</span><span class="s6">1</span><span class="s2">, </span><span class="s6">2</span><span class="s2">, </span><span class="s6">3</span><span class="s2">, </span><span class="s6">4</span><span class="s2">, </span><span class="s6">5</span><span class="s2">].map(val =&gt; (</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                          </span>&lt;button</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                            </span>key={val}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                            </span>onClick={() =&gt; handleAnswer(q.id, val)}</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                            </span>className={</span><span class="s2">`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-lg font-semibold transition-all duration-200<span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">                              </span></span><span class="s7">${answers[q.id] === val<span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                                </span>? </span><span class="s2">'bg-indigo-600 text-white shadow-md transform scale-110'</span><span class="s7"><span class="Apple-converted-space"> </span></span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                                </span>: </span><span class="s2">'bg-gray-100 text-gray-600 hover:bg-indigo-100 hover:text-indigo-700'</span><span class="s7">}</span><span class="s2">`</span><span class="s7">}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                          </span>&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                            </span>{val}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                          </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>))}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                      </span>&lt;span className=</span><span class="s2">"text-xs text-gray-400 font-medium w-full sm:w-auto text-right sm:text-left"</span><span class="s7">&gt;</span><span class="s9">Полностью</span><span class="s7">&lt;br className=</span><span class="s2">"hidden sm:block"</span><span class="s7">/&gt;</span><span class="s9">согласен</span><span class="s7">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>))}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>{errorMsg &amp;&amp; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                </span>&lt;div className=</span><span class="s2">"mt-8 p-4 bg-red-50 text-red-700 rounded-xl border border-red-200 flex items-center"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                  </span>&lt;svg className=</span><span class="s2">"w-5 h-5 mr-2 flex-shrink-0"</span><span class="s7"> fill=</span><span class="s2">"currentColor"</span><span class="s7"> viewBox=</span><span class="s2">"0 0 20 20"</span><span class="s7">&gt;&lt;path fillRule=</span><span class="s2">"evenodd"</span><span class="s7"> d=</span><span class="s2">"M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"</span><span class="s7"> clipRule=</span><span class="s2">"evenodd"</span><span class="s7"> /&gt;&lt;/svg&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>{errorMsg}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>)}</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;div className=</span><span class="s4">"mt-10 flex justify-end"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&lt;button<span class="Apple-converted-space"> </span></span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>onClick={handleNext}</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                  </span>className=</span><span class="s2">"px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md"</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                  </span>{step === </span><span class="s6">5</span><span class="s7"> ? </span><span class="s2">'Завершить и показать результаты'</span><span class="s7"> : </span><span class="s2">'Следующий домен'</span><span class="s7">}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>)}</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>{step === </span><span class="s6">6</span><span class="s2"> &amp;&amp; calculateResults &amp;&amp; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">          </span>&lt;div className=</span><span class="s2">"animate-fade-in space-y-8"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>&lt;h2 className=</span><span class="s2">"text-3xl font-bold text-gray-900 mb-2"</span><span class="s7">&gt;</span><span class="s9">Ваш</span><span class="s7"> </span><span class="s9">Психометрический</span><span class="s7"> </span><span class="s9">Профиль</span><span class="s7">&lt;/h2&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">              </span>&lt;p className=</span><span class="s4">"text-gray-500"</span><span class="s7">&gt;</span><span class="s2">Анализ</span><span class="s7"> </span><span class="s2">завершен</span><span class="s7">. </span><span class="s2">Ознакомьтесь</span><span class="s7"> </span><span class="s2">с</span><span class="s7"> </span><span class="s2">выявленными</span><span class="s7"> </span><span class="s2">паттернами</span><span class="s7">.&lt;/p&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p3"><span class="s7"><span class="Apple-converted-space">            </span>{</span><span class="s2">/* Блок доменов */</span><span class="s7">}</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"bg-white p-8 rounded-2xl shadow-sm border border-gray-100"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>&lt;h3 className=</span><span class="s2">"text-xl font-bold text-gray-800 mb-6 border-b pb-4"</span><span class="s7">&gt;</span><span class="s9">Ключевая</span><span class="s7"> </span><span class="s9">неудовлетворенная</span><span class="s7"> </span><span class="s9">потребность</span><span class="s7">&lt;/h3&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">              </span></span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;div className=</span><span class="s4">"space-y-6"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>{calculateResults.domains.map((domain, index) =&gt; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                  </span>&lt;div key={domain.id} className={</span><span class="s2">`p-5 rounded-xl border </span><span class="s7">${index === </span><span class="s6">0</span><span class="s7"> ? </span><span class="s2">'bg-indigo-50 border-indigo-200'</span><span class="s7"> : </span><span class="s2">'bg-gray-50 border-gray-100'</span><span class="s7">}</span><span class="s2">`</span><span class="s7">}&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                    </span>&lt;div className=</span><span class="s2">"flex justify-between items-start mb-2"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;h4 className={</span><span class="s4">`font-bold </span><span class="s2">${index === </span><span class="s6">0</span><span class="s2"> ? </span><span class="s4">'text-indigo-900 text-lg'</span><span class="s2"> : </span><span class="s4">'text-gray-800'</span><span class="s2">}</span><span class="s4">`</span><span class="s2">}&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                          </span>{index === </span><span class="s6">0</span><span class="s2"> &amp;&amp; </span><span class="s4">'🥇 '</span><span class="s2">} {domain.title.replace(</span><span class="s4">'ДОМЕН '</span><span class="s2">, </span><span class="s4">''</span><span class="s2">)}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;/h4&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;p className={</span><span class="s4">`text-sm mt-1 </span><span class="s2">${index === </span><span class="s6">0</span><span class="s2"> ? </span><span class="s4">'text-indigo-700 font-medium'</span><span class="s2"> : </span><span class="s4">'text-gray-500'</span><span class="s2">}</span><span class="s4">`</span><span class="s2">}&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                          </span>{domain.need}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;/p&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;div className=</span><span class="s4">"text-right flex-shrink-0"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;span className={</span><span class="s4">`text-2xl font-bold </span><span class="s2">${index === </span><span class="s6">0</span><span class="s2"> ? </span><span class="s4">'text-indigo-700'</span><span class="s2"> : </span><span class="s4">'text-gray-600'</span><span class="s2">}</span><span class="s4">`</span><span class="s2">}&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                          </span>{domain.averageScore}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>&lt;span className=</span><span class="s4">"text-xs text-gray-400 block"</span><span class="s2">&gt;</span><span class="s9">средний</span><span class="s2"> </span><span class="s9">балл</span><span class="s2">&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>))}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>&lt;p className=</span><span class="s2">"text-sm text-gray-500 mt-4 italic"</span><span class="s7">&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">                </span>* </span><span class="s2">Домен</span><span class="s7"> </span><span class="s2">с</span><span class="s7"> </span><span class="s2">наивысшим</span><span class="s7"> </span><span class="s2">баллом</span><span class="s7"> </span><span class="s2">указывает</span><span class="s7"> </span><span class="s2">на</span><span class="s7"> </span><span class="s2">главную</span><span class="s7"> </span><span class="s2">внутреннюю</span><span class="s7"> </span><span class="s2">потребность</span><span class="s7">, </span><span class="s2">требующую</span><span class="s7"> </span><span class="s2">проработки</span><span class="s7"> </span><span class="s2">в</span><span class="s7"> </span><span class="s2">коучинге</span><span class="s7">.</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/p&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p3"><span class="s7"><span class="Apple-converted-space">            </span>{</span><span class="s2">/* Блок Метапрограмм */</span><span class="s7">}</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s2">"bg-white p-8 rounded-2xl shadow-sm border border-gray-100"</span><span class="s7">&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>&lt;h3 className=</span><span class="s2">"text-xl font-bold text-gray-800 mb-6 border-b pb-4"</span><span class="s7">&gt;</span><span class="s9">Ваши</span><span class="s7"> </span><span class="s9">ведущие</span><span class="s7"> </span><span class="s9">Метапрограммы</span><span class="s7">&lt;/h3&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">              </span></span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">              </span>&lt;div className=</span><span class="s2">"grid grid-cols-1 md:grid-cols-2 gap-4"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>{calculateResults.metaprograms.filter(mp =&gt; mp.total &gt;= </span><span class="s6">5</span><span class="s2">).map((mp) =&gt; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                  </span>&lt;div key={mp.id} className={</span><span class="s2">`p-4 rounded-xl border </span><span class="s7">${mp.total &gt;= </span><span class="s6">8</span><span class="s7"> ? </span><span class="s2">'border-red-200 bg-red-50'</span><span class="s7"> : </span><span class="s2">'border-yellow-200 bg-yellow-50'</span><span class="s7">}</span><span class="s2">`</span><span class="s7">}&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                    </span>&lt;div className=</span><span class="s2">"flex justify-between items-start mb-3"</span><span class="s7">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;h4 className=</span><span class="s4">"font-bold text-gray-900 pr-2"</span><span class="s2">&gt;{mp.id}. {mp.name}&lt;/h4&gt;</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                      </span>&lt;span className=</span><span class="s2">"bg-white px-2 py-1 rounded text-lg font-bold shadow-sm"</span><span class="s7">&gt;{mp.total} &lt;span className=</span><span class="s2">"text-xs text-gray-400 font-normal"</span><span class="s7">&gt;/</span><span class="s6">10</span><span class="s7">&lt;/span&gt;&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;div className=</span><span class="s4">"flex items-center text-sm"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;span className={</span><span class="s4">`px-2 py-0.5 rounded-full font-medium text-xs </span><span class="s2">${mp.bg}</span><span class="s4"> </span><span class="s2">${mp.color}</span><span class="s4">`</span><span class="s2">}&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>{mp.severity}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;span className=</span><span class="s4">"text-gray-500 ml-2 text-xs truncate"</span><span class="s2"> title={mp.domainName}&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                        </span>{mp.domainName.split(</span><span class="s4">':'</span><span class="s2">)[</span><span class="s6">1</span><span class="s2">]}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                      </span>&lt;/span&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                  </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>))}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s2"><span class="Apple-converted-space">              </span></span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>{calculateResults.metaprograms.filter(mp =&gt; mp.total &gt;= </span><span class="s6">5</span><span class="s2">).length === </span><span class="s6">0</span><span class="s2"> &amp;&amp; (</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                </span>&lt;div className=</span><span class="s2">"text-center p-8 bg-green-50 rounded-xl border border-green-200 text-green-800"</span><span class="s7">&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">                  </span>&lt;p className=</span><span class="s4">"font-semibold text-lg"</span><span class="s7">&gt;</span><span class="s2">У</span><span class="s7"> </span><span class="s2">вас</span><span class="s7"> </span><span class="s2">нет</span><span class="s7"> </span><span class="s2">ярко</span><span class="s7"> </span><span class="s2">выраженных</span><span class="s7"> </span><span class="s2">дезадаптивных</span><span class="s7"> </span><span class="s2">метапрограмм</span><span class="s7">.&lt;/p&gt;</span></p>
-<p class="p6"><span class="s7"><span class="Apple-converted-space">                  </span>&lt;p className=</span><span class="s4">"mt-2 text-sm"</span><span class="s7">&gt;</span><span class="s2">Это</span><span class="s7"> </span><span class="s2">означает</span><span class="s7"> </span><span class="s2">высокую</span><span class="s7"> </span><span class="s2">психологическую</span><span class="s7"> </span><span class="s2">гибкость</span><span class="s7"> </span><span class="s2">и</span><span class="s7"> </span><span class="s2">устойчивость</span><span class="s7">.&lt;/p&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>)}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s5"></span><br></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;div className=</span><span class="s4">"text-center pt-8"</span><span class="s2">&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;button<span class="Apple-converted-space"> </span></span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span>onClick={resetTest}</span></p>
-<p class="p4"><span class="s7"><span class="Apple-converted-space">                </span>className=</span><span class="s2">"px-6 py-3 bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-bold rounded-xl transition-all"</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">                </span></span><span class="s9">Пройти</span><span class="s2"> </span><span class="s9">тест</span><span class="s2"> </span><span class="s9">заново</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">              </span>&lt;/button&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">            </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">        </span>)}</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>&lt;/main&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">      </span>&lt;style dangerouslySetInnerHTML={{__html: </span><span class="s4">`</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>from { opacity: 0; transform: translateY(10px); }</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>to { opacity: 1; transform: translateY(0); }</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>.animate-fade-in {</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">          </span>animation: fadeIn 0.4s ease-out forwards;</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p4"><span class="s2"><span class="Apple-converted-space">      </span>`</span><span class="s7">}} /&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">    </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s2"><span class="Apple-converted-space">  </span>);</span></p>
-<p class="p1"><span class="s2">}</span></p>
+  <div id="root"></div>
+  <script type="text/babel">
+const { useState, useMemo } = React;
+
+// --- ДАННЫЕ ТЕСТА ---
+const domains = [
+  {
+    id: 1,
+    title: "ДОМЕН 1: Разрыв связи и отвержение",
+    need: "Потребность в безопасности",
+    questions: [
+      { id: "1_d", mp: 1, mpName: "Покинутость / Нестабильность", text: "Я часто боюсь, что близкие люди внезапно исчезнут из моей жизни или найдут кого-то лучше.", type: "direct" },
+      { id: "1_r", mp: 1, mpName: "Покинутость / Нестабильность", text: "Я абсолютно уверен, что люди, которых я люблю, всегда будут рядом со мной.", type: "reverse" },
+      { id: "2_d", mp: 2, mpName: "Эмоциональный голод", text: "Мне кажется, что меня никто по-настоящему не понимает и не согревает душевным теплом.", type: "direct" },
+      { id: "2_r", mp: 2, mpName: "Эмоциональный голод", text: "Я чувствую глубокую связь с окружающими и получаю достаточно заботы и внимания.", type: "reverse" },
+      { id: "3_d", mp: 3, mpName: "Использование / Недоверие", text: "Я постоянно ищу скрытые мотивы в поведении людей; они часто хотят использовать меня.", type: "direct" },
+      { id: "3_r", mp: 3, mpName: "Использование / Недоверие", text: "Я легко доверяю людям и верю в их искренние намерения без подвоха.", type: "reverse" },
+      { id: "4_d", mp: 4, mpName: "Поломанность", text: "В глубине души я чувствую, что со мной что-то фундаментально не так, я словно «бракованный».", type: "direct" },
+      { id: "4_r", mp: 4, mpName: "Поломанность", text: "Я считаю себя достойным, целостным человеком, заслуживающим любви просто по праву рождения.", type: "reverse" },
+      { id: "5_d", mp: 5, mpName: "Социальная изоляция / Отвержение", text: "Я всегда чувствую себя белой вороной, аутсайдером в любой компании или группе.", type: "direct" },
+      { id: "5_r", mp: 5, mpName: "Социальная изоляция / Отвержение", text: "Я легко вливаюсь в любой коллектив и быстро начинаю чувствовать себя «своим».", type: "reverse" },
+      { id: "6_d", mp: 6, mpName: "Конфликт лояльности", text: "Мой личный успех или сильные изменения в жизни кажутся мне предательством моей семьи или старого окружения.", type: "direct" },
+      { id: "6_r", mp: 6, mpName: "Конфликт лояльности", text: "Я легко позволяю себе быть успешнее или жить иначе, чем мои родственники и друзья, не испытывая вины.", type: "reverse" },
+      { id: "7_d", mp: 7, mpName: "Эмоциональная инвалидация", text: "Я часто думаю, что мои чувства неуместны, преувеличены или «неправильны».", type: "direct" },
+      { id: "7_r", mp: 7, mpName: "Эмоциональная инвалидация", text: "Я полностью доверяю своим эмоциям и считаю их абсолютно естественными и важными.", type: "reverse" },
+      { id: "8_d", mp: 8, mpName: "Страх близости", text: "Когда отношения становятся слишком близкими, я чувствую угрозу и желание отдалиться.", type: "direct" },
+      { id: "8_r", mp: 8, mpName: "Страх близости", text: "Я чувствую себя абсолютно безопасно и комфортно, когда полностью открываюсь партнеру.", type: "reverse" },
+      { id: "9_d", mp: 9, mpName: "Отсутствие принадлежности", text: "Я чувствую хроническое одиночество, словно у меня нет корней ни в одном месте или обществе.", type: "direct" },
+      { id: "9_r", mp: 9, mpName: "Отсутствие принадлежности", text: "У меня есть четкое, непоколебимое ощущение своего места в мире, своего «дома».", type: "reverse" },
+      { id: "10_d", mp: 10, mpName: "Семейная запутанность", text: "Мне порой кажется, что я проживаю не свою жизнь, а несу груз или расплачиваюсь за судьбу кого-то из предков.", type: "direct" },
+      { id: "10_r", mp: 10, mpName: "Семейная запутанность", text: "Мои жизненные сценарии и выборы принадлежат исключительно мне, они свободны от семейных драм прошлого.", type: "reverse" }
+    ]
+  },
+  {
+    id: 2,
+    title: "ДОМЕН 2: Нарушенная автономия и эффективность",
+    need: "Потребность в компетентности",
+    questions: [
+      { id: "11_d", mp: 11, mpName: "Растворение", text: "В отношениях я часто теряю себя, полностью сливаясь с желаниями и жизнью партнера.", type: "direct" },
+      { id: "11_r", mp: 11, mpName: "Растворение", text: "Даже в самых близких отношениях я сохраняю четкие границы своей личности и своих интересов.", type: "reverse" },
+      { id: "12_d", mp: 12, mpName: "Провал", text: "Я внутренне убежден, что в конечном итоге потерплю неудачу в делах, за которые берусь.", type: "direct" },
+      { id: "12_r", mp: 12, mpName: "Провал", text: "Я непоколебимо уверен в своей компетентности и способности достигать поставленных целей.", type: "reverse" },
+      { id: "13_d", mp: 13, mpName: "Беспомощность", text: "Мне очень тяжело справляться с повседневными обязанностями без постоянной помощи и опоры других.", type: "direct" },
+      { id: "13_r", mp: 13, mpName: "Беспомощность", text: "Я чувствую себя абсолютно уверенно, решая бытовые, финансовые и жизненные задачи в одиночку.", type: "reverse" },
+      { id: "14_d", mp: 14, mpName: "Пророчество (Ожидание катастрофы)", text: "Я нахожусь в постоянном напряжении, ожидая, что вот-вот случится что-то плохое.", type: "direct" },
+      { id: "14_r", mp: 14, mpName: "Пророчество (Ожидание катастрофы)", text: "Я уверен, что в будущем, в том числе в старости, буду жить в полной безопасности и достатке.", type: "reverse" },
+      { id: "15_d", mp: 15, mpName: "Страх заметности", text: "Мне комфортнее оставаться в тени и быть «невидимым», чтобы избежать критики или нападок.", type: "direct" },
+      { id: "15_r", mp: 15, mpName: "Страх заметности", text: "Я с удовольствием привлекаю к себе внимание, выступаю публично и открыто заявляю о себе.", type: "reverse" },
+      { id: "16_d", mp: 16, mpName: "Ожидание разрешения", text: "Мне трудно начать действовать, пока кто-то авторитетный не подтвердит, что я делаю всё правильно.", type: "direct" },
+      { id: "16_r", mp: 16, mpName: "Ожидание разрешения", text: "Я легко принимаю решения и перехожу к действиям, опираясь исключительно на собственный внутренний авторитет.", type: "reverse" },
+      { id: "17_d", mp: 17, mpName: "Уязвимость к эмоциям", text: "Я мгновенно «заражаюсь» чужими эмоциями (тревогой, гневом) и не могу от них отстраниться.", type: "direct" },
+      { id: "17_r", mp: 17, mpName: "Уязвимость к эмоциям", text: "Я умею сохранять внутреннее спокойствие и стабильность, даже если рядом кто-то паникует или злится.", type: "reverse" },
+      { id: "18_d", mp: 18, mpName: "Созависимость регуляции", text: "Чтобы успокоиться и прийти в норму после стресса, мне физически необходимо присутствие конкретного человека.", type: "direct" },
+      { id: "18_r", mp: 18, mpName: "Созависимость регуляции", text: "Я умею самостоятельно и быстро приводить свои эмоции и нервную систему в баланс.", type: "reverse" },
+      { id: "19_d", mp: 19, mpName: "Чрезмерная автономия / Контрзависимость", text: "Я принципиально всё делаю сам; просить о помощи для меня равносильно проявлению слабости.", type: "direct" },
+      { id: "19_r", mp: 19, mpName: "Чрезмерная автономия / Контрзависимость", text: "Мне легко и комфортно делегировать задачи и искренне просить окружающих о поддержке, когда мне трудно.", type: "reverse" }
+    ]
+  },
+  {
+    id: 3,
+    title: "ДОМЕН 3: Ориентация на других",
+    need: "Потребность в свободе выражения",
+    questions: [
+      { id: "20_d", mp: 20, mpName: "Подчинение", text: "Я часто уступаю и соглашаюсь с другими, только чтобы избежать конфликта или их недовольства.", type: "direct" },
+      { id: "20_r", mp: 20, mpName: "Подчинение", text: "Я всегда твердо отстаиваю свои интересы, даже если это приведет к открытому столкновению с окружающими.", type: "reverse" },
+      { id: "21_d", mp: 21, mpName: "Поиск признания/одобрения", text: "Моя самооценка напрямую зависит от того, сколько восхищения, лайков и похвалы я получаю от окружающих.", type: "direct" },
+      { id: "21_r", mp: 21, mpName: "Поиск признания/одобрения", text: "Моя оценка себя остается стабильно высокой, даже если меня жестко критикуют или вообще не замечают.", type: "reverse" },
+      { id: "22_d", mp: 22, mpName: "Самопожертвование", text: "Я регулярно пренебрегаю собственными потребностями, ставя интересы и комфорт других людей на первое место.", type: "direct" },
+      { id: "22_r", mp: 22, mpName: "Самопожертвование", text: "Я забочусь о себе и своих желаниях в первую очередь, и абсолютно не считаю это эгоизмом.", type: "reverse" },
+      { id: "23_d", mp: 23, mpName: "Комплекс спасителя", text: "Я чувствую свою настоящую значимость только тогда, когда «спасаю» кого-то или решаю чужие серьезные проблемы.", type: "direct" },
+      { id: "23_r", mp: 23, mpName: "Комплекс спасителя", text: "Я спокойно позволяю людям самим проходить через их трудности, не вмешиваясь и не бросаясь на помощь.", type: "reverse" },
+      { id: "24_d", mp: 24, mpName: "Сверхответственность", text: "Я чувствую, что обязан поддерживать хорошую атмосферу и сглаживать углы в коллективе или семье любой ценой.", type: "direct" },
+      { id: "24_r", mp: 24, mpName: "Сверхответственность", text: "Я не считаю себя ответственным за настроение, обиды и эмоции других взрослых людей.", type: "reverse" },
+      { id: "25_d", mp: 25, mpName: "Эмоциональное исполнение", text: "У меня есть склонность драматизировать события и «громко» проживать эмоции, чтобы на меня обратили внимание.", type: "direct" },
+      { id: "25_r", mp: 25, mpName: "Эмоциональное исполнение", text: "Я выражаю свои чувства ровно и спокойно, не нуждаясь в театральности и зрителях.", type: "reverse" },
+      { id: "26_d", mp: 26, mpName: "Заслуженная ценность", text: "Мне кажется, что я должен постоянно доказывать свою ценность через новые достижения, деньги и статус.", type: "direct" },
+      { id: "26_r", mp: 26, mpName: "Заслуженная ценность", text: "Я глубоко уверен, что ценен сам по себе, просто потому что я есть, независимо от карьерных или финансовых успехов.", type: "reverse" }
+    ]
+  },
+  {
+    id: 4,
+    title: "ДОМЕН 4: Гиперконтроль и подавление",
+    need: "Потребность в спонтанности",
+    questions: [
+      { id: "27_d", mp: 27, mpName: "Пессимизм", text: "Я склонен обращать внимание на негативные аспекты и всегда готовлюсь к худшему сценарию.", type: "direct" },
+      { id: "27_r", mp: 27, mpName: "Пессимизм", text: "В любой ситуации я изначально вижу позитивные возможности и свято верю в лучший исход.", type: "reverse" },
+      { id: "28_d", mp: 28, mpName: "Перфекционизм", text: "Я требую от себя абсолютной безупречности во всем; любая моя ошибка для меня — это катастрофа.", type: "direct" },
+      { id: "28_r", mp: 28, mpName: "Перфекционизм", text: "Я легко прощаю себе недочеты и живу по принципу: «сделанное лучше идеального».", type: "reverse" },
+      { id: "29_d", mp: 29, mpName: "Эмоциональная ингибиция (подавление)", text: "Я тщательно контролирую и подавляю свои естественные порывы, чтобы всегда выглядеть рационально и сдержанно.", type: "direct" },
+      { id: "29_r", mp: 29, mpName: "Эмоциональная ингибиция (подавление)", text: "Я очень спонтанный человек и легко, без цензуры проявляю свои чувства в моменте.", type: "reverse" },
+      { id: "30_d", mp: 30, mpName: "Инструкции", text: "Я очень хорошо вижу ошибки других людей, и меня сильно раздражает, когда они не следуют правилам и тупят.", type: "direct" },
+      { id: "30_r", mp: 30, mpName: "Инструкции", text: "Я максимально терпим к чужим недостаткам и неэффективности; у каждого могут быть свои правила жизни.", type: "reverse" },
+      { id: "31_d", mp: 31, mpName: "Страх воздействия / Запрет на гнев", text: "Я панически боюсь проявить свой гнев, потому что уверен, что это разрушит человека или наши отношения.", type: "direct" },
+      { id: "31_r", mp: 31, mpName: "Страх воздействия / Запрет на гнев", text: "Я легко, открыто и без чувства вины выражаю свою злость, когда кто-то нарушает мои границы.", type: "reverse" }
+    ]
+  },
+  {
+    id: 5,
+    title: "ДОМЕН 5: Нарушенные границы",
+    need: "Потребность в реалистичных рамках",
+    questions: [
+      { id: "32_d", mp: 32, mpName: "Надменность", text: "Правила созданы не для меня; я заслуживаю особого отношения и большего, чем другие.", type: "direct" },
+      { id: "32_r", mp: 32, mpName: "Надменность", text: "Я считаю себя абсолютно равным любому другому человеку, без претензий на какие-либо привилегии.", type: "reverse" },
+      { id: "33_d", mp: 33, mpName: "Отсутствие дисциплины", text: "Мне трудно усидеть на месте, и я часто бросаю дела, если они требуют долгого терпения без быстрого результата.", type: "direct" },
+      { id: "33_r", mp: 33, mpName: "Отсутствие дисциплины", text: "Я обладаю железной дисциплиной и легко отказываюсь от сиюминутных удовольствий ради долгосрочной, большой цели.", type: "reverse" }
+    ]
+  }
+];
+
+function App() {
+  const [step, setStep] = useState(0); // 0 = Intro, 1-5 = Domains, 6 = Results
+  const [answers, setAnswers] = useState({});
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleAnswer = (qId, value) => {
+    setAnswers(prev => ({ ...prev, [qId]: value }));
+    setErrorMsg('');
+  };
+
+  const handleNext = () => {
+    if (step >= 1 && step <= 5) {
+      const currentDomain = domains[step - 1];
+      const unanswered = currentDomain.questions.filter(q => !answers[q.id]);
+      if (unanswered.length > 0) {
+        setErrorMsg('Пожалуйста, ответьте на все вопросы на этой странице, чтобы продолжить.');
+        return;
+      }
+    }
+    window.scrollTo(0, 0);
+    setStep(prev => prev + 1);
+  };
+
+  const calculateResults = useMemo(() => {
+    if (step !== 6) return null;
+
+    const results = {
+      domains: [],
+      metaprograms: []
+    };
+
+    let allMps = [];
+
+    domains.forEach(domain => {
+      let domainTotalScore = 0;
+      let domainMpCount = domain.questions.length / 2;
+
+      const mpMap = {};
+      domain.questions.forEach(q => {
+        if (!mpMap[q.mp]) {
+          mpMap[q.mp] = { id: q.mp, name: q.mpName, domainId: domain.id, domainName: domain.title, need: domain.need };
+        }
+        if (q.type === 'direct') {
+          mpMap[q.mp].directScore = answers[q.id] || 0;
+        } else {
+          const rawScore = answers[q.id] || 0;
+          mpMap[q.mp].reverseScore = rawScore > 0 ? (6 - rawScore) : 0;
+        }
+      });
+
+      Object.values(mpMap).forEach(mp => {
+        mp.total = mp.directScore + mp.reverseScore;
+        domainTotalScore += mp.total;
+
+        let severity = 'Низкая (не проявлена)';
+        let color = 'text-green-600';
+        let bg = 'bg-green-100';
+        if (mp.total >= 8) {
+          severity = 'Ярко выражена';
+          color = 'text-red-600';
+          bg = 'bg-red-100';
+        } else if (mp.total >= 5) {
+          severity = 'Умеренная';
+          color = 'text-yellow-600';
+          bg = 'bg-yellow-100';
+        }
+
+        mp.severity = severity;
+        mp.color = color;
+        mp.bg = bg;
+        allMps.push(mp);
+      });
+
+      results.domains.push({
+        id: domain.id,
+        title: domain.title,
+        need: domain.need,
+        averageScore: (domainTotalScore / domainMpCount).toFixed(1)
+      });
+    });
+
+    results.metaprograms = allMps.sort((a, b) => b.total - a.total);
+    results.domains.sort((a, b) => parseFloat(b.averageScore) - parseFloat(a.averageScore));
+
+    return results;
+  }, [step, answers]);
+
+  const resetTest = () => {
+    setAnswers({});
+    setStep(0);
+    window.scrollTo(0, 0);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans pb-12">
+      <header className="bg-indigo-600 text-white p-6 shadow-md">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl font-bold">Архитектура Метапрограмм</h1>
+          <p className="text-indigo-200 mt-1">Психометрический профиль личности (33 паттерна)</p>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto mt-8 p-4">
+        {step === 0 && (
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h2 className="text-3xl font-semibold mb-4 text-gray-900">Инструкция</h2>
+            <div className="prose prose-indigo max-w-none text-gray-600 space-y-4 text-lg">
+              <p>Вам будет предложено 66 утверждений. Прочитайте каждое и оцените, насколько оно описывает ваши привычные мысли, чувства или поведение.</p>
+              <p>Отвечайте <strong>быстро</strong>, опираясь на первое впечатление.</p>
+              <div className="bg-indigo-50 p-6 rounded-xl border border-indigo-100 mt-6">
+                <h3 className="font-semibold text-indigo-900 mb-2">Шкала оценки:</h3>
+                <ul className="list-disc pl-5 space-y-2 text-indigo-800">
+                  <li><strong>1</strong> — Абсолютно не согласен</li>
+                  <li><strong>2</strong> — Скорее не согласен</li>
+                  <li><strong>3</strong> — Нейтрально (иногда да, иногда нет)</li>
+                  <li><strong>4</strong> — Скорее согласен</li>
+                  <li><strong>5</strong> — Полностью согласен</li>
+                </ul>
+              </div>
+            </div>
+            <button
+              onClick={handleNext}
+              className="mt-8 w-full md:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+            >
+              Начать тестирование
+            </button>
+          </div>
+        )}
+
+        {step >= 1 && step <= 5 && (
+          <div className="animate-fade-in">
+            <div className="mb-6 flex items-center justify-between text-sm font-medium text-gray-500">
+              <span>Шаг {step} из 5</span>
+              <span>Осталось: {5 - step}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-8">
+              <div className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500" style={{ width: `${(step / 5) * 100}%` }}></div>
+            </div>
+
+            <div className="bg-white p-6 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">{domains[step - 1].title}</h2>
+              <p className="text-indigo-600 font-medium mb-8">Исследуемая потребность: {domains[step - 1].need}</p>
+
+              <div className="space-y-12">
+                {domains[step - 1].questions.map((q, index) => (
+                  <div key={q.id} className="border-b border-gray-100 pb-8 last:border-0 last:pb-0">
+                    <p className="text-lg font-medium text-gray-800 mb-6">{index + 1}. {q.text}</p>
+
+                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 w-full max-w-2xl mx-auto">
+                      <span className="text-xs text-gray-400 font-medium w-full sm:w-auto text-left sm:text-right">Абсолютно<br className="hidden sm:block"/>не согласен</span>
+
+                      <div className="flex justify-between items-center w-full sm:w-auto gap-2 md:gap-4">
+                        {[1, 2, 3, 4, 5].map(val => (
+                          <button
+                            key={val}
+                            onClick={() => handleAnswer(q.id, val)}
+                            className={`w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-lg font-semibold transition-all duration-200
+                              ${answers[q.id] === val
+                                ? 'bg-indigo-600 text-white shadow-md transform scale-110'
+                                : 'bg-gray-100 text-gray-600 hover:bg-indigo-100 hover:text-indigo-700'}`}
+                          >
+                            {val}
+                          </button>
+                        ))}
+                      </div>
+
+                      <span className="text-xs text-gray-400 font-medium w-full sm:w-auto text-right sm:text-left">Полностью<br className="hidden sm:block"/>согласен</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {errorMsg && (
+                <div className="mt-8 p-4 bg-red-50 text-red-700 rounded-xl border border-red-200 flex items-center">
+                  <svg className="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" /></svg>
+                  {errorMsg}
+                </div>
+              )}
+
+              <div className="mt-10 flex justify-end">
+                <button
+                  onClick={handleNext}
+                  className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all shadow-md"
+                >
+                  {step === 5 ? 'Завершить и показать результаты' : 'Следующий домен'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 6 && calculateResults && (
+          <div className="animate-fade-in space-y-8">
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Ваш Психометрический Профиль</h2>
+              <p className="text-gray-500">Анализ завершен. Ознакомьтесь с выявленными паттернами.</p>
+            </div>
+
+            {/* Блок доменов */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Ключевая неудовлетворенная потребность</h3>
+
+              <div className="space-y-6">
+                {calculateResults.domains.map((domain, index) => (
+                  <div key={domain.id} className={`p-5 rounded-xl border ${index === 0 ? 'bg-indigo-50 border-indigo-200' : 'bg-gray-50 border-gray-100'}`}>
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 className={`font-bold ${index === 0 ? 'text-indigo-900 text-lg' : 'text-gray-800'}`}>
+                          {index === 0 && '🥇 '} {domain.title.replace('ДОМЕН ', '')}
+                        </h4>
+                        <p className={`text-sm mt-1 ${index === 0 ? 'text-indigo-700 font-medium' : 'text-gray-500'}`}>
+                          {domain.need}
+                        </p>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <span className={`text-2xl font-bold ${index === 0 ? 'text-indigo-700' : 'text-gray-600'}`}>
+                          {domain.averageScore}
+                        </span>
+                        <span className="text-xs text-gray-400 block">средний балл</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-gray-500 mt-4 italic">
+                * Домен с наивысшим баллом указывает на главную внутреннюю потребность, требующую проработки в коучинге.
+              </p>
+            </div>
+
+            {/* Блок Метапрограмм */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+              <h3 className="text-xl font-bold text-gray-800 mb-6 border-b pb-4">Ваши ведущие Метапрограммы</h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {calculateResults.metaprograms.filter(mp => mp.total >= 5).map((mp) => (
+                  <div key={mp.id} className={`p-4 rounded-xl border ${mp.total >= 8 ? 'border-red-200 bg-red-50' : 'border-yellow-200 bg-yellow-50'}`}>
+                    <div className="flex justify-between items-start mb-3">
+                      <h4 className="font-bold text-gray-900 pr-2">{mp.id}. {mp.name}</h4>
+                      <span className="bg-white px-2 py-1 rounded text-lg font-bold shadow-sm">{mp.total} <span className="text-xs text-gray-400 font-normal">/10</span></span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <span className={`px-2 py-0.5 rounded-full font-medium text-xs ${mp.bg} ${mp.color}`}>
+                        {mp.severity}
+                      </span>
+                      <span className="text-gray-500 ml-2 text-xs truncate" title={mp.domainName}>
+                        {mp.domainName.split(':')[1]}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {calculateResults.metaprograms.filter(mp => mp.total >= 5).length === 0 && (
+                <div className="text-center p-8 bg-green-50 rounded-xl border border-green-200 text-green-800">
+                  <p className="font-semibold text-lg">У вас нет ярко выраженных дезадаптивных метапрограмм.</p>
+                  <p className="mt-2 text-sm">Это означает высокую психологическую гибкость и устойчивость.</p>
+                </div>
+              )}
+            </div>
+
+            <div className="text-center pt-8">
+              <button
+                onClick={resetTest}
+                className="px-6 py-3 bg-white border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-bold rounded-xl transition-all"
+              >
+                Пройти тест заново
+              </button>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
